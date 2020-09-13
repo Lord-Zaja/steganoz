@@ -1,2 +1,2 @@
 # steganoz
-Simple steganography tool
+Simple steganography tool written in Qt C++
