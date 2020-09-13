@@ -1,0 +1,2 @@
+# steganoz
+Simple steganography tool
