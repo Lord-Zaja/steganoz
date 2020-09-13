@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/decode.png</file>
+        <file>icons/encode.png</file>
+        <file>icons/exit.png</file>
+        <file>icons/save.png</file>
+        <file>icons/saveas.png</file>
+    </qresource>
+</RCC>
