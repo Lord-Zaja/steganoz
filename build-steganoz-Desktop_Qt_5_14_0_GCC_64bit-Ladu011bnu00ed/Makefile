@@ -52,15 +52,19 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../steganoz/encode.cpp \
+SOURCES       = ../steganoz/decode.cpp \
+		../steganoz/encode.cpp \
 		../steganoz/main.cpp \
 		../steganoz/mainwindow.cpp qrc_icons.cpp \
+		moc_decode.cpp \
 		moc_encode.cpp \
 		moc_mainwindow.cpp
-OBJECTS       = encode.o \
+OBJECTS       = decode.o \
+		encode.o \
 		main.o \
 		mainwindow.o \
 		qrc_icons.o \
+		moc_decode.o \
 		moc_encode.o \
 		moc_mainwindow.o
 DIST          = /home/Zaja/Qt/5.14.0/gcc_64/mkspecs/features/spec_pre.prf \
@@ -273,8 +277,10 @@ DIST          = /home/Zaja/Qt/5.14.0/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/Zaja/Qt/5.14.0/gcc_64/mkspecs/features/exceptions.prf \
 		/home/Zaja/Qt/5.14.0/gcc_64/mkspecs/features/yacc.prf \
 		/home/Zaja/Qt/5.14.0/gcc_64/mkspecs/features/lex.prf \
-		../steganoz/steganoz.pro ../steganoz/encode.h \
-		../steganoz/mainwindow.h ../steganoz/encode.cpp \
+		../steganoz/steganoz.pro ../steganoz/decode.h \
+		../steganoz/encode.h \
+		../steganoz/mainwindow.h ../steganoz/decode.cpp \
+		../steganoz/encode.cpp \
 		../steganoz/main.cpp \
 		../steganoz/mainwindow.cpp
 QMAKE_TARGET  = steganoz
@@ -729,8 +735,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../steganoz/icons.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /home/Zaja/Qt/5.14.0/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../steganoz/encode.h ../steganoz/mainwindow.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../steganoz/encode.cpp ../steganoz/main.cpp ../steganoz/mainwindow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../steganoz/decode.h ../steganoz/encode.h ../steganoz/mainwindow.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../steganoz/decode.cpp ../steganoz/encode.cpp ../steganoz/main.cpp ../steganoz/mainwindow.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -760,6 +766,7 @@ compiler_rcc_clean:
 qrc_icons.cpp: ../steganoz/icons.qrc \
 		/home/Zaja/Qt/5.14.0/gcc_64/bin/rcc \
 		../steganoz/icons/save.png \
+		../steganoz/icons/open.png \
 		../steganoz/icons/decode.png \
 		../steganoz/icons/saveas.png \
 		../steganoz/icons/exit.png \
@@ -772,12 +779,12 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /home/Zaja/Qt/5.14.0/gcc_64/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -std=gnu++11 -Wall -Wextra -dM -E -o moc_predefs.h /home/Zaja/Qt/5.14.0/gcc_64/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_encode.cpp moc_mainwindow.cpp
+compiler_moc_header_make_all: moc_decode.cpp moc_encode.cpp moc_mainwindow.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_encode.cpp moc_mainwindow.cpp
-moc_encode.cpp: ../steganoz/encode.h \
-		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/QWidget \
-		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qwidget.h \
+	-$(DEL_FILE) moc_decode.cpp moc_encode.cpp moc_mainwindow.cpp
+moc_decode.cpp: ../steganoz/decode.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/QDialog \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qdialog.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qtguiglobal.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qglobal.h \
@@ -803,6 +810,118 @@ moc_encode.cpp: ../steganoz/encode.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qversiontagging.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qtgui-config.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qwidget.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qwindowdefs.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qobjectdefs.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qnamespace.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qwindowdefs_win.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qobject.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qstring.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qchar.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qbytearray.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qrefcount.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qarraydata.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qstringliteral.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qstringalgorithms.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qstringview.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qstringbuilder.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qlist.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qalgorithms.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qiterator.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qhashfunctions.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qpair.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qvector.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qcontainertools_impl.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qpoint.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qbytearraylist.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qstringlist.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qregexp.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qstringmatcher.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qcoreevent.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qscopedpointer.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qmetatype.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qvarlengtharray.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qcontainerfwd.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qobject_impl.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qmargins.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qpaintdevice.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qrect.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qsize.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qpalette.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qcolor.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qrgb.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qrgba64.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qbrush.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qmatrix.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qpolygon.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qregion.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qdatastream.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qiodevice.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qline.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qtransform.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qpainterpath.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qimage.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qpixelformat.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qpixmap.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qsharedpointer.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qshareddata.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qhash.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qfont.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qfontmetrics.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qfontinfo.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qsizepolicy.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qcursor.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qkeysequence.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qevent.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qvariant.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qmap.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qdebug.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qtextstream.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qlocale.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qset.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qcontiguouscache.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qurl.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qurlquery.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qfile.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qfiledevice.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qvector2d.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qtouchdevice.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/QObject \
+		moc_predefs.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/bin/moc
+	/home/Zaja/Qt/5.14.0/gcc_64/bin/moc $(DEFINES) --include /run/media/Zaja/DA50F9F050F9D36D/LINUX/GIT/Programy/steganoz/build-steganoz-Desktop_Qt_5_14_0_GCC_64bit-Ladu011bnu00ed/moc_predefs.h -I/home/Zaja/Qt/5.14.0/gcc_64/mkspecs/linux-g++ -I/run/media/Zaja/DA50F9F050F9D36D/LINUX/GIT/Programy/steganoz/steganoz -I/home/Zaja/Qt/5.14.0/gcc_64/include -I/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets -I/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui -I/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore -I. -I/usr/include/c++/10 -I/usr/include/c++/10/x86_64-redhat-linux -I/usr/include/c++/10/backward -I/usr/lib/gcc/x86_64-redhat-linux/10/include -I/usr/local/include -I/usr/include ../steganoz/decode.h -o moc_decode.cpp
+
+moc_encode.cpp: ../steganoz/encode.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/QDialog \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qdialog.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qtguiglobal.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qglobal.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qconfig.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qtcore-config.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qsystemdetection.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qprocessordetection.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qcompilerdetection.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qtypeinfo.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qsysinfo.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qlogging.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qflags.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qatomic.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qbasicatomic.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qgenericatomic.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qatomic_msvc.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qglobalstatic.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qmutex.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qnumeric.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qversiontagging.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qtgui-config.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qwidget.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qwindowdefs.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qobjectdefs.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qnamespace.h \
@@ -1012,9 +1131,9 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 
 ####### Compile
 
-encode.o: ../steganoz/encode.cpp ../steganoz/encode.h \
-		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/QWidget \
-		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qwidget.h \
+decode.o: ../steganoz/decode.cpp ../steganoz/decode.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/QDialog \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qdialog.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qtguiglobal.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qglobal.h \
@@ -1040,6 +1159,143 @@ encode.o: ../steganoz/encode.cpp ../steganoz/encode.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qversiontagging.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qtgui-config.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qwidget.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qwindowdefs.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qobjectdefs.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qnamespace.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qwindowdefs_win.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qobject.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qstring.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qchar.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qbytearray.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qrefcount.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qarraydata.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qstringliteral.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qstringalgorithms.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qstringview.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qstringbuilder.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qlist.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qalgorithms.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qiterator.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qhashfunctions.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qpair.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qvector.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qcontainertools_impl.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qpoint.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qbytearraylist.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qstringlist.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qregexp.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qstringmatcher.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qcoreevent.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qscopedpointer.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qmetatype.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qvarlengtharray.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qcontainerfwd.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qobject_impl.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qmargins.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qpaintdevice.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qrect.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qsize.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qpalette.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qcolor.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qrgb.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qrgba64.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qbrush.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qmatrix.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qpolygon.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qregion.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qdatastream.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qiodevice.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qline.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qtransform.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qpainterpath.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qimage.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qpixelformat.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qpixmap.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qsharedpointer.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qshareddata.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qhash.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qfont.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qfontmetrics.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qfontinfo.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qsizepolicy.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qcursor.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qkeysequence.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qevent.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qvariant.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qmap.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qdebug.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qtextstream.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qlocale.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qset.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qcontiguouscache.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qurl.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qurlquery.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qfile.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qfiledevice.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qvector2d.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qtouchdevice.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/QObject \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/QLineEdit \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qlineedit.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qframe.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qtextcursor.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qtextformat.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qpen.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qtextoption.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/QPushButton \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qpushbutton.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qabstractbutton.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qicon.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/QVBoxLayout \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qboxlayout.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qlayout.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qlayoutitem.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qgridlayout.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/QHBoxLayout \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/QLabel \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qlabel.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/QFileDialog \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qfiledialog.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qdir.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qfileinfo.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/QMessageBox \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qmessagebox.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/QBitArray \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qbitarray.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o decode.o ../steganoz/decode.cpp
+
+encode.o: ../steganoz/encode.cpp ../steganoz/encode.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/QDialog \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qdialog.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qtguiglobal.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qglobal.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qconfig.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qtcore-config.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qsystemdetection.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qprocessordetection.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qcompilerdetection.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qtypeinfo.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qsysinfo.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qlogging.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qflags.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qatomic.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qbasicatomic.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qgenericatomic.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qatomic_msvc.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qglobalstatic.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qmutex.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qnumeric.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qversiontagging.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qtgui-config.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qwidget.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qwindowdefs.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qobjectdefs.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qnamespace.h \
@@ -1135,7 +1391,17 @@ encode.o: ../steganoz/encode.cpp ../steganoz/encode.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qlayout.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qlayoutitem.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qgridlayout.h \
-		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/QHBoxLayout
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/QHBoxLayout \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/QDebug \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/QFileDialog \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qfiledialog.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qdir.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qfileinfo.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/QCloseEvent \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/QMessageBox \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qmessagebox.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/QBitArray \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qbitarray.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o encode.o ../steganoz/encode.cpp
 
 main.o: ../steganoz/main.cpp ../steganoz/mainwindow.h \
@@ -1363,6 +1629,11 @@ mainwindow.o: ../steganoz/mainwindow.cpp ../steganoz/mainwindow.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qtouchdevice.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qtabwidget.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/qicon.h \
+		../steganoz/encode.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/QDialog \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qdialog.h \
+		../steganoz/decode.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/QObject \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/QMenuBar \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qmenubar.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qmenu.h \
@@ -1376,15 +1647,26 @@ mainwindow.o: ../steganoz/mainwindow.cpp ../steganoz/mainwindow.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qstatusbar.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/QMessageBox \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qmessagebox.h \
-		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qdialog.h \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtGui/QCloseEvent \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/QLabel \
 		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qlabel.h \
-		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qframe.h
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qframe.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/QDebug \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/QFileInfo \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qfileinfo.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/QDateTime \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qdatetime.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/QDir \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtCore/qdir.h \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/QFileDialog \
+		/home/Zaja/Qt/5.14.0/gcc_64/include/QtWidgets/qfiledialog.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../steganoz/mainwindow.cpp
 
 qrc_icons.o: qrc_icons.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_icons.o qrc_icons.cpp
+
+moc_decode.o: moc_decode.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_decode.o moc_decode.cpp
 
 moc_encode.o: moc_encode.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_encode.o moc_encode.cpp

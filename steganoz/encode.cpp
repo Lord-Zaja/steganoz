@@ -9,9 +9,10 @@
 #include <QMessageBox>
 #include <QBitArray>
 #include <bitset>
-Encode::Encode(QWidget *parent) : QWidget(parent)
+
+Encode::Encode(QWidget *parent) : QDialog(parent)
 {
-       this->setWindowTitle(tr("Encode"));
+       this->   setWindowTitle(tr("Encode"));
        createActions();
 }
 void Encode::createActions(){
@@ -34,6 +35,10 @@ void Encode::createActions(){
     connect(btnOpen,SIGNAL(clicked()),this,SLOT(open()));
     connect(btnEncode,SIGNAL(clicked()),this,SLOT(slotencode()));
     connect(editMsg,SIGNAL(textChanged()),this,SLOT(editchange()));
+
+    if(!img.isNull()&&!editMsg->toPlainText().isEmpty()){//teoreticky platí vždy
+        btnEncode->setEnabled(true);
+    }
 }
 
 void Encode::editchange(){
@@ -45,7 +50,7 @@ void Encode::editchange(){
 }
 
 void Encode::open(){
-    QString fileName=QFileDialog::getOpenFileName(this,tr("Select an image"),QDir::currentPath(),tr("Images (*.png *.jpg *.jpeg);;All Files(*)"));
+    fileName=QFileDialog::getOpenFileName(this,tr("Select an image"),QDir::currentPath(),tr("Images (*.png *.jpg *.jpeg);;All Files(*)"));
     img=QImage(fileName);
     if(!img.isNull()&&!editMsg->toPlainText().isEmpty()){
         btnEncode->setEnabled(true);
@@ -62,27 +67,129 @@ void Encode::slotencode(){
     if(img.isNull()||editMsg->toPlainText().isEmpty()){
         return;
     }
-    QBitArray msgBits=text2bits(editMsg->toPlainText());
+    //Zpráva začíná smyboly "/start"
+    //Zpráva ukončena symboly "/end"
+    QBitArray msgBits=text2bits("/start"+editMsg->toPlainText()+"/end");
+    QColor color;
+    img=img.convertToFormat(QImage::Format_ARGB32);
+    int h=img.size().height();
+    int w=img.size().width();
+    if(h*w*3*32<msgBits.size()){
+        //zpráva se nevejde do obrázku
+        //chybová hláška
+        //return
+        QMessageBox::critical(this,tr("Error"),tr("Your message is too large for this image!")+tr("Max number of ASCII characters is" )+QString::number((h*w*12)-10));
+        return;
+    }
 
-    img.convertToFormat(QImage::Format_ARGB32);
-    unsigned int h=img.size().height();
-    unsigned int w=img.size().width();
+    //Zápis bitů do barev podle velikosti zprávy
+    //0 G první bit při zprávě menší jak počet pixelů
+    //1 B první bit při zprávě větší jak počet pixelů
+    //2 R první bit při zprávě větší jak dvojnásobek počtu pixelů
+    //3 G druhý bit při ..
+    //4 B ..
+    unsigned int colType=0;
+    unsigned int colbitIndex=0;
+    int msgbitIndex=0;
+    std::bitset<32> colBits;
+    for (int shots=0;shots<=(msgBits.size()-msgBits.size()%(h*w))/(h*w);shots++) {//kolikrát se projdou všechny pixely
+        for (int y=0;y<h;y++) {
+            for (int x=0;x<w;x++) {
+                color=img.pixelColor(x,y);
+                switch (colType) {
+                case 0://green
+                    colBits=color.green();
+                    colBits[colbitIndex]=msgBits[msgbitIndex];
+                    color.setGreen(colBits.to_ulong());
+                    break;
+                case 1://blue
+                    colBits=color.blue();
+                    colBits[colbitIndex]=msgBits[msgbitIndex];
+                    color.setBlue(colBits.to_ulong());
+                    break;
+                case 2://red
+                    colBits=color.red();
+                    colBits[colbitIndex]=msgBits[msgbitIndex];
+                    color.setRed(colBits.to_ulong());
+                    break;
+                }
+                img.setPixelColor(x,y,color);
+                msgbitIndex++;
+                if(msgbitIndex>(msgBits.size()-1))break;//všechny bity zprávy  zapsány
+            }
+            if(msgbitIndex>(msgBits.size()-1))break;
+        }
+        colType++;
+        if(colType>2){
+            colType=0;
+            colbitIndex++;//do všech pixelů byl zapsán jeden bit u všech tří barev, posuň bit
+        }
+    }
 
+    /*
+    //zápis pouze do zelené barvy bez ošetření
     //vypočíst počet zapsaných bitů do jedné barvy
     //zápis bitů do jednotlivých pixelů
+
+    QColor col;
     std::bitset<32> bits;
-    unsigned int index=0;
+    int index=0;
     for(unsigned int y=0;y<h;y++){
         for(unsigned int x=0;x<w;x++){
-            bits=img.pixelColor(x,y).green();       //zápis zatím pouze do zelené barvy
-            bits[0]=msgBits[index];
+            col=img.pixelColor(x,y);
+            bits=col.green();
+            //bits=img.pixelColor(x,y).green();       //zápis zatím pouze do zelené barvy
+            bits[0]=msgBits[index];             //zápis do prvního bitu proměnné bits
+            col.setGreen(bits.to_ulong());
+            img.setPixelColor(x,y,col);
+            //img.pixelColor(x,y).setGreen(bits.to_ulong());  //výměna původní barvy za barvu s jedním bitem zprávy
             index++;
             if(index>(msgBits.size()-1))break;
         }
         if(index>(msgBits.size()-1))break;
     }
-    //nevyzkoušeno
+    */
 
+    /*
+    qDebug()<<msgBits;
+    QBitArray t(30);
+    for(int x=0;x<29;x++){
+        bits=img.pixelColor(x,0).green();
+        t[x]=bits[0];
+    }
+    qDebug()<<t;
+    qDebug()<<"Před";
+    bits=img.pixelColor(0,0).green();
+    qDebug()<<QString::fromStdString(bits.to_string());
+    if(bits[0]==false){
+        bits[0]=true;
+    }else{
+        bits[0]=false;
+    }
+    QColor c=img.pixelColor(0,0);
+    c.setGreen(1);
+    img.setPixelColor(0,0,c);
+    qDebug()<<"Po";
+    bits=img.pixelColor(0,0).green();
+    qDebug()<<QString::fromStdString(bits.to_string());
+
+    std::bitset<8> byte;
+    std::string strMsg;
+    for(unsigned int y=0;y<h;y++){
+        for(unsigned int x=0;x<w;x++){//projdi celý obrázek
+            bits=img.pixelColor(x,y).green();       //vezmi barvu
+            byte[index]=bits[0];                    //vezmi jeden bit z barvy
+            index++;
+            if(index>7){//mám poskládaný jeden znak
+                break;
+                strMsg=strMsg+char(byte.to_ulong());//jeden bajt převede na číslo a to pak na znak, platí zatím pouze ascii
+                if(strMsg.size()>=4&&strMsg.substr(strMsg.size()-4)=="/end")break;
+                index=0;
+            }
+        }
+    }
+    qDebug()<<QString::fromStdString(strMsg.substr(0,20));
+*/
     this->close();
 }
 
@@ -99,6 +206,10 @@ QBitArray Encode::text2bits(QString str){
         }
     }
     return msgBits;
+}
+void Encode::setImg(QImage s_img){
+    img=s_img;
+    btnEncode->setEnabled(true);
 }
 QString Encode::bits2text(QBitArray msgBits){
     std::string vystup;
