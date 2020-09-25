@@ -17,22 +17,27 @@ class MainWindow : public QMainWindow
     Q_OBJECT
     QMenu *mnuStart;
     QAction *actEncode;
+    QAction *actOpen;
     QAction *actDecode;
     QAction *actSave;
     QAction *actSaveas;
     QAction *actExit;
     QToolBar *toolBar;
     QLabel *lblImg;
+    QImage img;
+    QString fileName;
     void closeEvent(QCloseEvent *evt);
+    void imgDraw(QImage img);
+    void setupForm();
+    void setupActions();
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void setupForm();
-    void setupActions();
 public slots:
     void encode();
     void decode();
     void save();
     void saveas();
+    void open();
 };
 #endif // MAINWINDOW_H
